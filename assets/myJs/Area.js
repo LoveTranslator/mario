@@ -6,10 +6,11 @@ class Area extends Entity {
     }
 
     toBuild() {
-        if (mario.posX > 460 && keyObj['39'] && this.background2 > 0) {
+        if (mario.posX >= 460 && keyObj['39'] && this.background2 > 0) {
             this.background -= 3;
             this.background2 -= 3;
         }
+
         ctx.drawImage(this.img, this.background, 0, canvas.width, canvas.height);
         ctx.drawImage(this.img, this.background2, 0, canvas.width, canvas.height);
     }

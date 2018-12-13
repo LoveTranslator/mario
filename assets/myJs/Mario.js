@@ -5,6 +5,7 @@ class Mario extends DynamicEntity {
         this.posYAfterJump = 0;
         this.jumpSpeed = -3;
         this.jumpLimit = 80;
+        this.readyToJump = true;
     }
 
     moveLeft(jump) {
@@ -30,11 +31,7 @@ class Mario extends DynamicEntity {
             this.jumpSpeed = -this.jumpSpeed;
         }
         this.posY += this.jumpSpeed;
-        console.log('jump');
-        if (mario.posY + mario.height >= canvas.height) {
-            mario.jumpSpeed = -mario.jumpSpeed;
-            keyObj['38'] = false;
-        }
+        this.readyToJump = false;
         if (direction === 'left') {
             this.sx = 35;
             this.sy = 80;

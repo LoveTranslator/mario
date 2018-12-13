@@ -4,7 +4,7 @@ class Key {
     }
     onkeydown(event) {
         this[event.keyCode] = true;
-        if (event.keyCode === 38) {
+        if (event.keyCode === 38 && mario.readyToJump) {
             mario.posYAfterJump = mario.posY;
         }
     }
