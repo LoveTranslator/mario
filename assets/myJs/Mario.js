@@ -2,11 +2,9 @@ class Mario extends DynamicEntity {
     constructor(src, sx, sy, sWidth, sHeight, posX, posY, width, height) {
         super(src, sx, sy, sWidth, sHeight, posX, posY, width, height);
 
-        this.jumpCount = 0;
-        this.jumpLength = 50;
-        this.jumpHeight = 0;
-        this.myPosY = this.posY;
-
+        this.posYAfterJump = 0;
+        this.jumpSpeed = -3;
+        this.jumpLimit = 80;
     }
 
     moveLeft(jump) {
@@ -27,18 +25,16 @@ class Mario extends DynamicEntity {
         }
     }
 
-    jump(posY, direction) {
-        this.jumpCount++;
-        this.jumpHeight = 2 * this.jumpLength * Math.sin(Math.PI * this.jumpCount / this.jumpLength);
-        if (this.jumpCount > this.jumpLength) {
-            this.jumpCount = 0;
-            keyObj['38'] = false;
-            mario.sx = 216;
-            mario.sy = 0;
-            this.jumpHeight = 0;
+    jump(direction) {
+        if (this.posY <= this.posYAfterJump - this.jumpLimit) {
+            this.jumpSpeed = -this.jumpSpeed;
         }
-        
-        this.posY = this.myPosY - this.jumpHeight;
+        this.posY += this.jumpSpeed;
+        console.log('jump');
+        if (mario.posY + mario.height >= canvas.height) {
+            mario.jumpSpeed = -mario.jumpSpeed;
+            keyObj['38'] = false;
+        }
         if (direction === 'left') {
             this.sx = 35;
             this.sy = 80;

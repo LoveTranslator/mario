@@ -21,4 +21,20 @@ class Entity {
     toBuild() {
         ctx.drawImage(this.img, this.sx, this.sy, this.sWidth, this.sHeight, this.posX, this.posY, this.width, this.height);
     }
+
+    interactionWithMario(element) {
+
+        if (mario.posY + mario.height >= canvas.height) {
+            mario.posY = canvas.height - mario.height;
+            
+        }
+        /*else {
+            if (mario.posX <= (this.posX + this.width)) {
+                if ((mario.posY + mario.height) >= this.posY) {
+                    mario.posY = this.posY - mario.height;
+                    mario.jumpSpeed = -mario.jumpSpeed;
+                }
+            }
+        }*/
+    }
 }

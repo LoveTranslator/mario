@@ -7,13 +7,8 @@ class Brick extends Entity {
     interactionWithBlocks() {
         if (mario.posX <= (this.posX + this.width)) {
             if ((mario.posY + mario.height) <= this.posY) {
-                mario.posY = this.posY - mario.height;
-                mario.myPosY = mario.posY;
+
             }
-        }
-        else {
-            mario.myPosY = this.saveMarioPosY;
-            mario.posY = this.saveMarioPosY;
         }
     }
 }

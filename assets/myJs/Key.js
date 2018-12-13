@@ -4,17 +4,20 @@ class Key {
     }
     onkeydown(event) {
         this[event.keyCode] = true;
+        if (event.keyCode === 38) {
+            mario.posYAfterJump = mario.posY;
+        }
     }
     onkeyup(event) {
         if (event.keyCode !== 38) {
             this[event.keyCode] = false;
         }
-        
+
         if (event.keyCode === 37) {
             mario.sx = 186;
         }
-        
-        if(event.keyCode === 39) {
+
+        if (event.keyCode === 39) {
             mario.sx = 246;
         }
     }
@@ -37,13 +40,13 @@ class Key {
         }
         if (this['38']) {
             if (this['39']) {
-                mario.jump(mario.posY, 'right');
+                mario.jump('right');
             }
             else if (this['37']) {
-                mario.jump(mario.posY, 'left');
+                mario.jump('left');
             }
             else {
-                mario.jump(mario.posY);
+                mario.jump();
             }
         }
     }
