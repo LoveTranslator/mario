@@ -2,15 +2,19 @@ class Mario extends DynamicEntity {
     constructor(src, sx, sy, sWidth, sHeight, posX, posY, width, height) {
         super(src, sx, sy, sWidth, sHeight, posX, posY, width, height);
 
+        /*переменные для расчёта прыжка*/
         this.posYAfterJump = 0;
-        this.jumpSpeed = -3;
-        this.jumpLimit = 80;
+        this.speedLeft = 3;
+        this.speedRight = 3;
         this.readyToJump = true;
+        this.jumpCount = 0;
+        this.jumpLength = 50;
+        this.jumpHeight = 0;
     }
 
     moveLeft(jump) {
         if (mario.posX > 0) {
-            this.posX -= 3;
+            this.posX -= this.speedLeft;
         }
         if (!jump) {
             this.movementSpriteSheet([95, 125, 155, 185], 0.01);
@@ -19,7 +23,7 @@ class Mario extends DynamicEntity {
 
     moveRight(jump) {
         if (mario.posX < 460) {
-            this.posX += 3;
+            this.posX += this.speedRight;
         }
         if (!jump) {
             this.movementSpriteSheet([245, 275, 305, 335], 0.01);
@@ -27,11 +31,13 @@ class Mario extends DynamicEntity {
     }
 
     jump(direction) {
-        if (this.posY <= this.posYAfterJump - this.jumpLimit) {
-            this.jumpSpeed = -this.jumpSpeed;
-        }
-        this.posY += this.jumpSpeed;
         this.readyToJump = false;
+
+        this.jumpCount++;
+        this.jumpHeight = 2 * this.jumpLength * Math.sin(Math.PI * this.jumpCount / this.jumpLength);
+
+        this.posY = this.posYAfterJump - this.jumpHeight;
+
         if (direction === 'left') {
             this.sx = 35;
             this.sy = 80;
@@ -41,6 +47,11 @@ class Mario extends DynamicEntity {
             this.sy = 80;
         }
     }
+
+    comeDown() {
+
+    }
+
 
     addLife() {
 
