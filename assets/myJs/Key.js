@@ -21,33 +21,4 @@ class Key {
             mario.sx = 246;
         }
     }
-    movePlayer() {
-        if (this['37']) {
-            if (this['38']) {
-                mario.moveLeft(1);
-            }
-            else {
-                mario.moveLeft(0);
-            }
-        }
-        if (this['39']) {
-            if (this['38']) {
-                mario.moveRight(1);
-            }
-            else {
-                mario.moveRight(0);
-            }
-        }
-        if (this['38']) {
-            if (this['39']) {
-                mario.jump('right');
-            }
-            else if (this['37']) {
-                mario.jump('left');
-            }
-            else {
-                mario.jump();
-            }
-        }
-    }
 }

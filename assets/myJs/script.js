@@ -8,22 +8,36 @@ const ctx = canvas.getContext('2d');
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
+
     area.toBuild();
     mario.toBuild();
     brick.toBuild();
+    brick2.toBuild();
+    pipe.toBuild();
 
-    brick.interactionWithMario();
+    area.interactionWithMario();
 
-    keyObj.movePlayer();
+    myArr.forEach(item => mario.interactionWithItem(item));
+
+    mario.move();
 
     requestAnimationFrame(draw);
 }
 
 let area = new Area('assets/images/background1.png');
-let mario = new Mario('assets/images/mario.png', 216, 0, 16, 16, 250, 360, 40, 40);
+let mario = new Mario('assets/images/mario.png', 216, 0, 16, 16, 200, 360, 40, 40);
+let brick = new Entity('assets/images/custom.png', 0, 31, 17, 17, 300, 360, 34, 34);
+let brick2 = new Entity('assets/images/custom.png', 0, 31, 17, 17, 266, 360, 34, 34);
+let pipe = new Entity('assets/images/misc-2.png', 270, 400, 33, 48, 100, 304, 62, 96);
 let keyObj = new Key();
-let brick = new Brick('assets/images/custom.png', 0, 31, 17, 17, 300, 360, 34, 34);
+
+let myArr = [];
+myArr.push(brick);
+myArr.push(brick2);
+myArr.push(pipe);
+
+
+
 
 draw();
 
