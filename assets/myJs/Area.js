@@ -18,13 +18,13 @@ class Area extends Entity {
         /*Остановка прыжка при попадании на нижнюю грань canvas*/
         if (mario.posY + mario.height >= canvas.height - 6 &&
             !mario.readyToJump) {
-
-            keyObj['38'] = false;
+            mario.posY = canvas.height - mario.height - 1;
             mario.sx = 216;
             mario.sy = 0;
             mario.readyToJump = true;
             mario.jumpCount = 0;
             mario.jumpHeight = 0;
+            keyObj['38'] = false;
         }
     }
 }

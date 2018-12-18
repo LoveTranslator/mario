@@ -14,14 +14,14 @@ class Mario extends DynamicEntity {
 
     moveLeft(jump) {
         let stop;
-        myArr.forEach(function(item) {
-            if (item.posY + item.height > mario.posY &&
-                item.posY < mario.posY + mario.height &&
-                mario.posX <= item.posX + item.width + 4 &&
-                mario.posX >= item.posX + item.width + 1) {
+        objectArr.forEach((item) => {
+            if (item.posY + item.height > this.posY &&
+                item.posY < this.posY + this.height &&
+                this.posX <= item.posX + item.width + 3 &&
+                this.posX > item.posX + item.width) {
                 stop = true;
             }
-        })
+        });
         if (this.posX > 0 && !stop) {
             this.posX -= this.speedLeft;
         }
@@ -32,14 +32,14 @@ class Mario extends DynamicEntity {
 
     moveRight(jump) {
         let stop;
-        myArr.forEach(function(item) {
-            if (item.posY + item.height > mario.posY &&
-                item.posY < mario.posY + mario.height &&
-                mario.posX + mario.width >= item.posX - 4 &&
-                mario.posX + mario.width <= item.posX - 1) {
+        objectArr.forEach((item) => {
+            if (item.posY + item.height > this.posY &&
+                item.posY < this.posY + this.height &&
+                this.posX + this.width >= item.posX - 3 &&
+                this.posX + this.width < item.posX) {
                 stop = true;
             }
-        })
+        });
         if (this.posX < 460 && !stop) {
             this.posX += this.speedRight;
         }
@@ -65,48 +65,46 @@ class Mario extends DynamicEntity {
             this.sx = 395;
             this.sy = 80;
         }
-    }
 
-    interactionWithItem(item) {
-        /*ПОДБИТЬ ВСЕ ПОГРЕШНОСТИ !!!!*/
+        objectArr.forEach(item => {
+            if (this.posX + this.width >= item.posX &&
+                this.posX <= item.posX + item.width &&
+                this.posY + this.height >= item.posY - 4 &&
+                this.posY + this.height <= item.posY + 2 &&
+                !this.readyToJump) {
+                    
+                this.posY = item.posY - this.height - 1;
+                this.sx = 216;
+                this.sy = 0;
+                this.jumpCount = 0;
+                this.jumpHeight = 0;
+                this.readyToJump = true;
+                keyObj['38'] = false;
 
-        /*Остановка прыжка при попадании на объект*/
-        if (mario.posX + mario.width >= item.posX &&
-            mario.posX <= item.posX + item.width &&
-            mario.posY + mario.height >= item.posY - 10 &&
-            mario.posY + mario.height <= item.posY &&
-            !mario.readyToJump) {
-
-            mario.sx = 216;
-            mario.sy = 0;
-            mario.jumpCount = 0;
-            mario.jumpHeight = 0;
-            mario.readyToJump = true;
-            keyObj['38'] = false;
-
-        }
+            }
+        })
     }
 
     slipBlock() {
         let countX = 0;
         let countY = 0;
-        myArr.forEach(function(item, i) {
-            if (!(mario.posX + mario.width >= item.posX &&
-                    mario.posX <= item.posX + item.width) &&
-                mario.readyToJump) {
+        objectArr.forEach((item, i) => {
+
+            if (!(this.posX + this.width >= item.posX &&
+                    this.posX <= item.posX + item.width) &&
+                this.readyToJump) {
                 countX++;
             }
 
-            if (mario.posY + mario.height >= item.posY - 15 &&
-                mario.posY + mario.height <= canvas.height - 2 &&
-                mario.readyToJump) {
+            if (this.posY + this.height >= item.posY - 15 &&
+                this.posY + this.height <= canvas.height - 2 &&
+                this.readyToJump) {
                 countY++;
             }
         })
-        if (countX == myArr.length && countY > 0) {
-            mario.posY += 4;
+        if (countX == objectArr.length && countY > 0) {
+            this.posY += 4;
         }
-
     }
 
     move() {
