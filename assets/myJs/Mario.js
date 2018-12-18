@@ -55,6 +55,7 @@ class Mario extends DynamicEntity {
         this.jumpHeight = 2 * this.jumpLength * Math.sin(Math.PI * this.jumpCount / this.jumpLength);
 
         this.posY = this.posYAfterJump - this.jumpHeight;
+        /*console.log(`this.posY(${mario.posY}) = this.posYafterJump(${mario.posYAfterJump}) - this.jumpHeight(${mario.jumpHeight})`);*/
 
         if (direction === 'left') {
             this.sx = 35;
@@ -70,31 +71,26 @@ class Mario extends DynamicEntity {
     interactionWithItem(item) {
         /*ПОДБИТЬ ВСЕ ПОГРЕШНОСТИ !!!!*/
 
-        /*console.log(this.posX + this.width, '>=', item.posX);
-        console.log(this.posX, '<=', item.posX + item.width);
-        console.log(this.posY + this.height, '>=', item.posY - 4);
-        console.log(this.posY + this.height, '<=', item.posY);
-        console.log(!this.readyToJump);*/
-
         /*Остановка прыжка при попадании на объект*/
-        if (this.posX + this.width >= item.posX &&
-            this.posX <= item.posX + item.width &&
-            this.posY + this.height >= item.posY - 4 &&
-            this.posY + this.height <= item.posY &&
-            !this.readyToJump) {
+        if (mario.posX + mario.width >= item.posX &&
+            mario.posX <= item.posX + item.width &&
+            mario.posY + mario.height >= item.posY - 10 &&
+            mario.posY + mario.height <= item.posY &&
+            !mario.readyToJump) {
 
             keyObj['38'] = false;
-            this.sx = 216;
-            this.sy = 0;
-            this.readyToJump = true;
-            this.jumpCount = 0;
-            this.jumpHeight = 0;
+            mario.sx = 216;
+            mario.sy = 0;
+            mario.jumpCount = 0;
+            mario.jumpHeight = 0;
+            mario.readyToJump = true;
+
         }
 
         // 'сползание' с блоков
         /*if (!(this.posX + this.width >= item.posX &&
                 this.posX <= item.posX + item.width) &&
-            this.posY + this.height >= item.posY - 4 &&
+            this.posY + this.height >= item.posY - 10 &&
             this.posY + this.height <= canvas.height - 1 &&
             this.readyToJump) {
             this.posY += 4;
@@ -102,6 +98,7 @@ class Mario extends DynamicEntity {
     }
 
     move() {
+
         // Если нажата <-
         if (keyObj['37']) {
             if (keyObj['38']) {

@@ -19,10 +19,6 @@ class Entity {
     }
 
     toBuild() {
-        /*console.log('1)', brick.posY + brick.height, '>', mario.posY);
-        console.log('2)', brick.posY, '<', mario.posY + mario.height);
-        console.log('3)', mario.posX, '<=', brick.posX + brick.width + 4);
-        console.log('4)', mario.posX, '>=', brick.posX + brick.width + 1);*/
         ctx.drawImage(this.img, this.sx, this.sy, this.sWidth, this.sHeight, this.posX, this.posY, this.width, this.height);
     }
 }

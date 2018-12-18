@@ -16,7 +16,7 @@ class Area extends Entity {
     }
     interactionWithMario() {
         /*Остановка прыжка при попадании на нижнюю грань canvas*/
-        if (mario.posY + mario.height >= canvas.height - 4 &&
+        if (mario.posY + mario.height >= canvas.height - 6 &&
             !mario.readyToJump) {
 
             keyObj['38'] = false;
