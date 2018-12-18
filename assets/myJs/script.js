@@ -19,6 +19,8 @@ function draw() {
 
     myArr.forEach(item => mario.interactionWithItem(item));
 
+    mario.slipBlock();
+
     mario.move();
 
     requestAnimationFrame(draw);

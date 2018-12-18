@@ -55,7 +55,6 @@ class Mario extends DynamicEntity {
         this.jumpHeight = 2 * this.jumpLength * Math.sin(Math.PI * this.jumpCount / this.jumpLength);
 
         this.posY = this.posYAfterJump - this.jumpHeight;
-        /*console.log(`this.posY(${mario.posY}) = this.posYafterJump(${mario.posYAfterJump}) - this.jumpHeight(${mario.jumpHeight})`);*/
 
         if (direction === 'left') {
             this.sx = 35;
@@ -78,23 +77,36 @@ class Mario extends DynamicEntity {
             mario.posY + mario.height <= item.posY &&
             !mario.readyToJump) {
 
-            keyObj['38'] = false;
             mario.sx = 216;
             mario.sy = 0;
             mario.jumpCount = 0;
             mario.jumpHeight = 0;
             mario.readyToJump = true;
+            keyObj['38'] = false;
 
         }
+    }
 
-        // 'сползание' с блоков
-        /*if (!(this.posX + this.width >= item.posX &&
-                this.posX <= item.posX + item.width) &&
-            this.posY + this.height >= item.posY - 10 &&
-            this.posY + this.height <= canvas.height - 1 &&
-            this.readyToJump) {
-            this.posY += 4;
-        }*/
+    slipBlock() {
+        let countX = 0;
+        let countY = 0;
+        myArr.forEach(function(item, i) {
+            if (!(mario.posX + mario.width >= item.posX &&
+                    mario.posX <= item.posX + item.width) &&
+                mario.readyToJump) {
+                countX++;
+            }
+
+            if (mario.posY + mario.height >= item.posY - 15 &&
+                mario.posY + mario.height <= canvas.height - 2 &&
+                mario.readyToJump) {
+                countY++;
+            }
+        })
+        if (countX == myArr.length && countY > 0) {
+            mario.posY += 4;
+        }
+
     }
 
     move() {
