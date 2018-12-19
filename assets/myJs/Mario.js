@@ -49,6 +49,7 @@ class Mario extends DynamicEntity {
     }
 
     jump(direction) {
+
         this.readyToJump = false;
 
         this.jumpCount++;
@@ -85,26 +86,28 @@ class Mario extends DynamicEntity {
         })
     }
 
-    slipBlock() {
+    slipBlock() { // неверно отрабатывает функция!!!!
         let countX = 0;
         let countY = 0;
+        let itemPosY = 0;
         objectArr.forEach((item, i) => {
 
             if (!(this.posX + this.width >= item.posX &&
                     this.posX <= item.posX + item.width) &&
-                this.readyToJump) {
+                this.posY + this.height >= item.posY - 2 &&
+                this.posY + this.height <= canvas.height - 2) {
                 countX++;
             }
 
-            if (this.posY + this.height >= item.posY - 15 &&
+            if (this.posY + this.height >= item.posY - 2 &&
                 this.posY + this.height <= canvas.height - 2 &&
-                this.readyToJump) {
+                this.posX + this.width >= item.posX &&
+                this.posX <= item.posX + item.width) {
                 countY++;
             }
         })
-        
-        console.log(countX, countY);
-        if (countX == objectArr.length && countY > 0) {
+
+        if (countX > 0 && countY === 0 && this.readyToJump) {
             this.posY += 4;
         }
     }
