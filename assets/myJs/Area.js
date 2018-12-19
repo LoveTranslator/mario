@@ -18,7 +18,7 @@ class Area extends Entity {
     }
 
     moveMap() {
-        objectArr.forEach(item => {
+        interactionEntityArr.forEach(item => {
             if (mario.posX >= 460 && keyObj['39'] && this.arrBack[this.count - 1] > 3) {
                 item.posX -= mario.speedRight;
             }

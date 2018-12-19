@@ -10,11 +10,12 @@ class Mario extends DynamicEntity {
         this.jumpCount = 0;
         this.jumpLength = 50;
         this.jumpHeight = 0;
+
     }
 
     moveLeft(jump) {
         let stop;
-        objectArr.forEach((item) => {
+        interactionEntityArr.forEach((item) => {
             if (item.posY + item.height > this.posY &&
                 item.posY < this.posY + this.height &&
                 this.posX <= item.posX + item.width + 3 &&
@@ -32,7 +33,7 @@ class Mario extends DynamicEntity {
 
     moveRight(jump) {
         let stop;
-        objectArr.forEach((item) => {
+        interactionEntityArr.forEach((item) => {
             if (item.posY + item.height > this.posY &&
                 item.posY < this.posY + this.height &&
                 this.posX + this.width >= item.posX - 3 &&
@@ -49,12 +50,28 @@ class Mario extends DynamicEntity {
     }
 
     jump(direction) {
-
         this.readyToJump = false;
 
         this.jumpCount++;
-        this.jumpHeight = 2 * this.jumpLength * Math.sin(Math.PI * this.jumpCount / this.jumpLength);
+        let x = Math.sin(Math.PI * this.jumpCount / this.jumpLength);
+        if (x === -1) {
+            interactionEntityArr.forEach(item => {
+                if (this.posX + this.width >= item.posX &&
+                    this.posX <= item.posX + item.width) {
+                    this.posY += 1;
 
+                    this.sx = 216;
+                    this.sy = 0;
+                    this.jumpCount = 0;
+                    this.jumpHeight = 0;
+                    this.readyToJump = true;
+                    keyObj['38'] = false;
+
+                }
+            })
+        }
+
+        this.jumpHeight = 2 * this.jumpLength * x;
         this.posY = this.posYAfterJump - this.jumpHeight;
 
         if (direction === 'left') {
@@ -67,7 +84,7 @@ class Mario extends DynamicEntity {
             this.sy = 80;
         }
 
-        objectArr.forEach(item => {
+        interactionEntityArr.forEach(item => {
             if (this.posX + this.width >= item.posX &&
                 this.posX <= item.posX + item.width &&
                 this.posY + this.height >= item.posY - 4 &&
@@ -90,7 +107,7 @@ class Mario extends DynamicEntity {
         let countX = 0;
         let countY = 0;
         let itemPosY = 0;
-        objectArr.forEach((item, i) => {
+        interactionEntityArr.forEach((item, i) => {
 
             if (!(this.posX + this.width >= item.posX &&
                     this.posX <= item.posX + item.width) &&
@@ -107,9 +124,12 @@ class Mario extends DynamicEntity {
             }
         })
 
+
         if (countX > 0 && countY === 0 && this.readyToJump) {
             this.posY += 4;
         }
+
+
     }
 
     move() {
