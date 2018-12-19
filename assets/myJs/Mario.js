@@ -72,7 +72,7 @@ class Mario extends DynamicEntity {
                 this.posY + this.height >= item.posY - 4 &&
                 this.posY + this.height <= item.posY + 2 &&
                 !this.readyToJump) {
-                    
+
                 this.posY = item.posY - this.height - 1;
                 this.sx = 216;
                 this.sy = 0;
@@ -102,6 +102,8 @@ class Mario extends DynamicEntity {
                 countY++;
             }
         })
+        
+        console.log(countX, countY);
         if (countX == objectArr.length && countY > 0) {
             this.posY += 4;
         }
