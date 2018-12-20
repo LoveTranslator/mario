@@ -13,6 +13,16 @@ buildEntityArr.push(area);
 buildEntityArr.push(mario);
 
 createEntity(Entity, 'assets/images/custom.png', 0, 31, 16, 16, 0, 368, 32, 32, 34);
+
+createEntity(Entity, 'assets/images/custom.png', 0, 0, 16, 16, 248, 130, 32, 32, 1);
+
+createEntity(Entity, 'assets/images/custom.png', 0, 0, 16, 16, 200, 250, 32, 32, 1);
+createEntity(Entity, 'assets/images/custom.png', 96, 0, 16, 16, 232, 250, 32, 32, 1);
+createEntity(Entity, 'assets/images/custom.png', 0, 0, 16, 16, 264, 250, 32, 32, 1);
+createEntity(Entity, 'assets/images/custom.png', 96, 0, 16, 16, 296, 250, 32, 32, 1);
+
+
+
 createEntity(Entity, 'assets/images/misc-2.png', 309, 417.7, 31.75, 31.75, 450, 304, 64, 64, 1);
 createEntity(Entity, 'assets/images/misc-2.png', 270, 402, 33, 48, 608, 272, 64, 96, 1);
 createEntity(Entity, 'assets/images/misc-2.png', 230.25, 385.25, 32.25, 64.25, 800, 239.5, 65, 128.5, 1);

@@ -11,6 +11,8 @@ class Mario extends DynamicEntity {
         this.jumpLength = 50;
         this.jumpHeight = 0;
 
+        this.slickCount = 25;
+        this.slickLength = 20;
     }
 
     moveLeft(jump) {
@@ -23,6 +25,7 @@ class Mario extends DynamicEntity {
                 stop = true;
             }
         });
+
         if (this.posX > 0 && !stop) {
             this.posX -= this.speedLeft;
         }
@@ -41,6 +44,7 @@ class Mario extends DynamicEntity {
                 stop = true;
             }
         });
+
         if (this.posX < 460 && !stop) {
             this.posX += this.speedRight;
         }
@@ -51,39 +55,44 @@ class Mario extends DynamicEntity {
 
     jump(direction) {
         this.readyToJump = false;
-
         this.jumpCount++;
-        let x = Math.sin(Math.PI * this.jumpCount / this.jumpLength);
-        if (x === -1) {
-            interactionEntityArr.forEach(item => {
-                if (this.posX + this.width >= item.posX &&
-                    this.posX <= item.posX + item.width) {
-                    this.posY += 1;
-
-                    this.sx = 216;
-                    this.sy = 0;
-                    this.jumpCount = 0;
-                    this.jumpHeight = 0;
-                    this.readyToJump = true;
-                    keyObj['38'] = false;
-
-                }
-            })
-        }
-
-        this.jumpHeight = 2 * this.jumpLength * x;
+        this.jumpHeight = 2 * this.jumpLength * Math.sin(Math.PI * this.jumpCount / this.jumpLength);
         this.posY = this.posYAfterJump - this.jumpHeight;
 
+
+
+        // Выбор спрайта при нажатой ->
         if (direction === 'left') {
             this.sx = 35;
             this.sy = 80;
         }
-
+        // Выбор спрайта при нажатой <- 
         if (direction === 'right') {
             this.sx = 395;
             this.sy = 80;
         }
 
+        // фикс бага при зацикливании прыжка
+        if (Math.sin(Math.PI * this.jumpCount / this.jumpLength) === -1) {
+            interactionEntityArr.forEach(item => {
+                if (this.posX + this.width >= item.posX &&
+                    this.posX <= item.posX + item.width) {
+                    this.stopJump();
+                }
+            })
+        }
+
+        //Если марио ударился об потолок при прыжке.
+        interactionEntityArr.forEach(item => {
+            if (item.posY + item.height - 4 <= mario.posY &&
+                item.posY + item.height + 3 >= mario.posY &&
+                this.posX + this.width >= item.posX &&
+                this.posX <= item.posX + item.width) {
+                this.jumpLength = (this.posYAfterJump - this.posY) / 2;
+            }
+        })
+
+        // Если марио запрыгнул на объект
         interactionEntityArr.forEach(item => {
             if (this.posX + this.width >= item.posX &&
                 this.posX <= item.posX + item.width &&
@@ -92,12 +101,7 @@ class Mario extends DynamicEntity {
                 !this.readyToJump) {
 
                 this.posY = item.posY - this.height - 1;
-                this.sx = 216;
-                this.sy = 0;
-                this.jumpCount = 0;
-                this.jumpHeight = 0;
-                this.readyToJump = true;
-                keyObj['38'] = false;
+                this.stopJump();
 
             }
         })
@@ -107,8 +111,11 @@ class Mario extends DynamicEntity {
         let countX = 0;
         let countY = 0;
         let itemPosY = 0;
+
+        // 'Сползание' марио с блока.
         interactionEntityArr.forEach((item, i) => {
 
+            // Сколько блоков под марио вне зависимости по X
             if (!(this.posX + this.width >= item.posX &&
                     this.posX <= item.posX + item.width) &&
                 this.posY + this.height >= item.posY - 2 &&
@@ -116,6 +123,7 @@ class Mario extends DynamicEntity {
                 countX++;
             }
 
+            // Стоит ли марио на каком-то блоке
             if (this.posY + this.height >= item.posY - 2 &&
                 this.posY + this.height <= canvas.height - 2 &&
                 this.posX + this.width >= item.posX &&
@@ -123,17 +131,17 @@ class Mario extends DynamicEntity {
                 countY++;
             }
         })
-
-
         if (countX > 0 && countY === 0 && this.readyToJump) {
+            /*this.slickCount++;
+            this.posY += 2 * this.slickLength * Math.sin(Math.PI * this.slickCount / this.slickLength);*/
             this.posY += 4;
         }
-
-
+        /*else {
+            this.slickCount = 0;
+        }*/
     }
 
     move() {
-
         // Если нажата <-
         if (keyObj['37']) {
             if (keyObj['38']) {
@@ -166,6 +174,15 @@ class Mario extends DynamicEntity {
                 this.jump();
             }
         }
+    }
+
+    stopJump() {
+        this.sx = 216;
+        this.sy = 0;
+        this.jumpCount = 0;
+        this.jumpHeight = 0;
+        this.readyToJump = true;
+        keyObj['38'] = false;
     }
 
     addLife() {
