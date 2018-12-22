@@ -10,9 +10,6 @@ class Mario extends DynamicEntity {
         this.jumpCount = 0;
         this.jumpLength = 50;
         this.jumpHeight = 0;
-
-        this.slickCount = 25;
-        this.slickLength = 20;
     }
 
     moveLeft(jump) {
@@ -96,7 +93,7 @@ class Mario extends DynamicEntity {
         interactionEntityArr.forEach(item => {
             if (this.posX + this.width >= item.posX &&
                 this.posX <= item.posX + item.width &&
-                this.posY + this.height >= item.posY - 4 &&
+                this.posY + this.height >= item.posY - 5 &&
                 this.posY + this.height <= item.posY + 2 &&
                 !this.readyToJump) {
 
@@ -110,6 +107,7 @@ class Mario extends DynamicEntity {
     slipBlock() { // неверно отрабатывает функция!!!!
         let countX = 0;
         let countY = 0;
+        let countXY = 1;
         let itemPosY = 0;
 
         // 'Сползание' марио с блока.
@@ -132,13 +130,9 @@ class Mario extends DynamicEntity {
             }
         })
         if (countX > 0 && countY === 0 && this.readyToJump) {
-            /*this.slickCount++;
-            this.posY += 2 * this.slickLength * Math.sin(Math.PI * this.slickCount / this.slickLength);*/
             this.posY += 4;
         }
-        /*else {
-            this.slickCount = 0;
-        }*/
+
     }
 
     move() {
