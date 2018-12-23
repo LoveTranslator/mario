@@ -10,6 +10,9 @@ class Mario extends DynamicEntity {
         this.jumpCount = 0;
         this.jumpLength = 50;
         this.jumpHeight = 0;
+
+        this.stopRight = false;
+        this.slip = false;
     }
 
     moveLeft(jump) {
@@ -26,27 +29,35 @@ class Mario extends DynamicEntity {
         if (this.posX > 0 && !stop) {
             this.posX -= this.speedLeft;
         }
-        if (!jump) {
+        if (!jump && !this.slip) {
             this.movementSpriteSheet([95, 125, 155, 185], 0.01);
+        }
+        if (this.slip) {
+            this.sx = 5;
+            this.sy = 40;
         }
     }
 
     moveRight(jump) {
-        let stop;
+        this.stopRight = false;
         interactionEntityArr.forEach((item) => {
             if (item.posY + item.height > this.posY &&
                 item.posY < this.posY + this.height &&
                 this.posX + this.width >= item.posX - 3 &&
                 this.posX + this.width < item.posX) {
-                stop = true;
+                this.stopRight = true;
             }
         });
 
-        if (this.posX < 460 && !stop) {
+        if (this.posX < 460 && !this.stopRight) {
             this.posX += this.speedRight;
         }
         if (!jump) {
             this.movementSpriteSheet([245, 275, 305, 335], 0.01);
+        }
+        if (this.slip) {
+            this.sx = 425;
+            this.sy = 40;
         }
     }
 
@@ -55,8 +66,6 @@ class Mario extends DynamicEntity {
         this.jumpCount++;
         this.jumpHeight = 2 * this.jumpLength * Math.sin(Math.PI * this.jumpCount / this.jumpLength);
         this.posY = this.posYAfterJump - this.jumpHeight;
-
-
 
         // Выбор спрайта при нажатой ->
         if (direction === 'left') {
@@ -81,8 +90,8 @@ class Mario extends DynamicEntity {
 
         //Если марио ударился об потолок при прыжке.
         interactionEntityArr.forEach(item => {
-            if (item.posY + item.height - 4 <= mario.posY &&
-                item.posY + item.height + 3 >= mario.posY &&
+            if (item.posY + item.height - 4 <= this.posY &&
+                item.posY + item.height + 3 >= this.posY &&
                 this.posX + this.width >= item.posX &&
                 this.posX <= item.posX + item.width) {
                 this.jumpLength = (this.posYAfterJump - this.posY) / 2;
@@ -96,7 +105,6 @@ class Mario extends DynamicEntity {
                 this.posY + this.height >= item.posY - 5 &&
                 this.posY + this.height <= item.posY + 2 &&
                 !this.readyToJump) {
-
                 this.posY = item.posY - this.height - 1;
                 this.stopJump();
 
@@ -105,34 +113,36 @@ class Mario extends DynamicEntity {
     }
 
     slipBlock() { // неверно отрабатывает функция!!!!
+        this.slip = true;
         let countX = 0;
         let countY = 0;
-        let countXY = 1;
-        let itemPosY = 0;
-
         // 'Сползание' марио с блока.
-        interactionEntityArr.forEach((item, i) => {
+        interactionEntityArr.forEach((item) => {
 
             // Сколько блоков под марио вне зависимости по X
             if (!(this.posX + this.width >= item.posX &&
                     this.posX <= item.posX + item.width) &&
-                this.posY + this.height >= item.posY - 2 &&
+                this.posY + this.height >= item.posY - 4 &&
                 this.posY + this.height <= canvas.height - 2) {
                 countX++;
             }
 
             // Стоит ли марио на каком-то блоке
-            if (this.posY + this.height >= item.posY - 2 &&
-                this.posY + this.height <= canvas.height - 2 &&
+            if (this.posY + this.height >= item.posY - 4 &&
+                this.posY + this.height <= item.posY &&
                 this.posX + this.width >= item.posX &&
                 this.posX <= item.posX + item.width) {
                 countY++;
             }
         })
+
+        // падает пока не приземлиться на объект
         if (countX > 0 && countY === 0 && this.readyToJump) {
             this.posY += 4;
         }
-
+        else {
+            this.slip = false;
+        }
     }
 
     move() {

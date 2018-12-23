@@ -4,6 +4,9 @@ class Key {
     }
     onkeydown(event) {
         this[event.keyCode] = true;
+        if (this['38'] && mario.slip) {
+            this['38'] = false;
+        }
         if (event.keyCode === 38 && mario.readyToJump) {
             mario.jumpLength = 50;
         }
@@ -17,10 +20,12 @@ class Key {
         }
 
         if (event.keyCode === 37) {
+            mario.sy = 0;
             mario.sx = 186;
         }
 
         if (event.keyCode === 39) {
+            mario.sy = 0;
             mario.sx = 246;
         }
     }

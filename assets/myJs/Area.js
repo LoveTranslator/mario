@@ -19,12 +19,12 @@ class Area extends Entity {
 
     moveMap() {
         interactionEntityArr.forEach(item => {
-            if (mario.posX >= 460 && keyObj['39'] && this.arrBack[this.count - 1] > 3) {
+            if (mario.posX >= 460 && keyObj['39'] && this.arrBack[this.count - 1] > 3 && !mario.stopRight) {
                 item.posX -= mario.speedRight;
             }
         })
 
-        if (mario.posX >= 460 && keyObj['39'] && this.arrBack[this.count - 1] > 3) {
+        if (mario.posX >= 460 && keyObj['39'] && this.arrBack[this.count - 1] > 3 && !mario.stopRight) {
             for (let i = 0; i < this.arrBack.length; i++) {
                 this.arrBack[i] -= mario.speedRight;
             }

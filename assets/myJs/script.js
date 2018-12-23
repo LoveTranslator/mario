@@ -5,6 +5,7 @@ const ctx = canvas.getContext('2d');
 
 let interactionEntityArr = [];
 let buildEntityArr = [];
+let entityArr = [];
 
 let area = new Area('assets/images/background1.png', 5);
 let mario = new Mario('assets/images/mario.png', 216, 0, 16, 16, 50, 328, 40, 40);
@@ -53,26 +54,31 @@ createEntity(Entity, 'assets/images/custom.png', 0, 31, 16, 16, 3300, 368, 32, 3
 createEntity(Entity, 'assets/images/misc-2.png', 248, 864, 31, 80, 3600, 208, 62, 160, 1); // крепость, левая часть
 createEntity(Entity, 'assets/images/misc-2.png', 279, 864, 48, 80, 3662, 208, 96, 160, 1); // крепость, правая часть
 
+buildEntityArr.push(...entityArr);
+interactionEntityArr.push(...entityArr);
+
 function createEntity(myClass, src, sx, sy, sWidth, sHeight, posX, posY, width, height, count) {
-    let entityArr = [];
-    for (let i = 0; i < count; i++) {
+    let i = entityArr.length;
+    count = count + entityArr.length;
+    for (i; i < count; i++) {
         entityArr[i] = new myClass(src, sx, sy, sWidth, sHeight, posX, posY, width, height);
         posX += width;
     }
-    buildEntityArr.push(...entityArr);
-    interactionEntityArr.push(...entityArr);
 }
-
-
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    buildEntityArr.forEach(item => {
+    buildEntityArr.forEach((item, i) => {
         if (item === area || item.posX + item.width > 0 && item.posX < canvas.width) {
             item.toBuild();
         }
-    })
+    });
+
+    interactionEntityArr.forEach((item, i) => {
+        if (item.posX + item.width < 0) {
+            interactionEntityArr.splice(i, 1);
+        }
+    });
 
     area.moveMap();
     area.interactionWithMario();
