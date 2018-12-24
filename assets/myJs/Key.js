@@ -13,6 +13,17 @@ class Key {
         if (event.keyCode === 38 && mario.readyToJump) {
             mario.posYAfterJump = mario.posY;
         }
+
+        if (event.keyCode === 37) {
+            mario.runLeft = true;
+        }
+        if (event.keyCode === 39) {
+            mario.runRight = true;
+        }
+        
+        if (event.keyCode === 38) {
+            mario.jumpFlag = true;
+        }
     }
     onkeyup(event) {
         if (event.keyCode !== 38) {
@@ -20,6 +31,15 @@ class Key {
         }
 
         if (event.keyCode === 37) {
+            mario.runLeft = false;
+        }
+
+        if (event.keyCode === 39) {
+            mario.runRight = false;
+        }
+        
+        /*Не отрабатывает*/
+        /*if (event.keyCode === 37) { 
             mario.sy = 0;
             mario.sx = 186;
         }
@@ -27,6 +47,6 @@ class Key {
         if (event.keyCode === 39) {
             mario.sy = 0;
             mario.sx = 246;
-        }
+        }*/
     }
 }

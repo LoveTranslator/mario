@@ -2,131 +2,59 @@ class Mario extends DynamicEntity {
     constructor(src, sx, sy, sWidth, sHeight, posX, posY, width, height) {
         super(src, sx, sy, sWidth, sHeight, posX, posY, width, height);
 
-        /*переменные для расчёта прыжка*/
-        this.posYAfterJump = 0;
-        this.speedLeft = 3;
-        this.speedRight = 3;
-        this.readyToJump = true;
+        this.posYAfterJump = 0; // Позиция марио по X в момент прыжка.
+        this.speedLeft = 3; // Скорость движения влево.
+        this.speedRight = 3; // Скорость движения вправо.
+        this.readyToJump = true; // Флаг, готовности марио к прыжку.
+        this.jumpFlag = false; // Флаг, находится ли марио в прыжке
+
+        /*Переменные для расчёта прыжка*/
         this.jumpCount = 0;
         this.jumpLength = 50;
         this.jumpHeight = 0;
+        this.jumpIncrement = 0;
 
-        this.stopRight = false;
-        this.slip = false;
+        this.runLeft = false;
+        this.runRight = false;
+
+        this.stopRight = false; // Флаг на остановку вправо.
+        this.stopLeft = false; // Флаг на остановку влево.
+        this.slip = false; // Флаг на 'сползания' с блока.
     }
 
-    moveLeft(jump) {
-        let stop;
-        interactionEntityArr.forEach((item) => {
-            if (item.posY + item.height > this.posY &&
-                item.posY < this.posY + this.height &&
-                this.posX <= item.posX + item.width + 3 &&
-                this.posX > item.posX + item.width) {
-                stop = true;
-            }
-        });
-
-        if (this.posX > 0 && !stop) {
+    moveLeft() {
+        if (this.posX > 0 && !this.stopLeft) {
             this.posX -= this.speedLeft;
-        }
-        if (!jump && !this.slip) {
-            this.movementSpriteSheet([95, 125, 155, 185], 0.01);
-        }
-        if (this.slip) {
-            this.sx = 5;
-            this.sy = 40;
         }
     }
 
     moveRight(jump) {
-        this.stopRight = false;
-        interactionEntityArr.forEach((item) => {
-            if (item.posY + item.height > this.posY &&
-                item.posY < this.posY + this.height &&
-                this.posX + this.width >= item.posX - 3 &&
-                this.posX + this.width < item.posX) {
-                this.stopRight = true;
-            }
-        });
-
         if (this.posX < 460 && !this.stopRight) {
             this.posX += this.speedRight;
         }
-        if (!jump) {
-            this.movementSpriteSheet([245, 275, 305, 335], 0.01);
-        }
-        if (this.slip) {
-            this.sx = 425;
-            this.sy = 40;
-        }
     }
 
-    jump(direction) {
+    jump() {
         this.readyToJump = false;
         this.jumpCount++;
-        this.jumpHeight = 2 * this.jumpLength * Math.sin(Math.PI * this.jumpCount / this.jumpLength);
+        this.jumpIncrement = Math.sin(Math.PI * this.jumpCount / this.jumpLength);
+        this.jumpHeight = 2 * this.jumpLength * this.jumpIncrement;
         this.posY = this.posYAfterJump - this.jumpHeight;
-
-        // Выбор спрайта при нажатой ->
-        if (direction === 'left') {
-            this.sx = 35;
-            this.sy = 80;
-        }
-        // Выбор спрайта при нажатой <- 
-        if (direction === 'right') {
-            this.sx = 395;
-            this.sy = 80;
-        }
-
-        // фикс бага при зацикливании прыжка
-        if (Math.sin(Math.PI * this.jumpCount / this.jumpLength) === -1) {
-            interactionEntityArr.forEach(item => {
-                if (this.posX + this.width >= item.posX &&
-                    this.posX <= item.posX + item.width) {
-                    this.stopJump();
-                }
-            })
-        }
-
-        //Если марио ударился об потолок при прыжке.
-        interactionEntityArr.forEach(item => {
-            if (item.posY + item.height - 4 <= this.posY &&
-                item.posY + item.height + 3 >= this.posY &&
-                this.posX + this.width >= item.posX &&
-                this.posX <= item.posX + item.width) {
-                this.jumpLength = (this.posYAfterJump - this.posY) / 2;
-            }
-        })
-
-        // Если марио запрыгнул на объект
-        interactionEntityArr.forEach(item => {
-            if (this.posX + this.width >= item.posX &&
-                this.posX <= item.posX + item.width &&
-                this.posY + this.height >= item.posY - 5 &&
-                this.posY + this.height <= item.posY + 2 &&
-                !this.readyToJump) {
-                this.posY = item.posY - this.height - 1;
-                this.stopJump();
-
-            }
-        })
     }
 
     slipBlock() { // неверно отрабатывает функция!!!!
         this.slip = true;
         let countX = 0;
         let countY = 0;
-        // 'Сползание' марио с блока.
-        interactionEntityArr.forEach((item) => {
 
-            // Сколько блоков под марио вне зависимости по X
+        // Марио не стоит на блоке, но под ним ниже есть N колво блоков
+        interactionEntityArr.forEach((item) => {
             if (!(this.posX + this.width >= item.posX &&
                     this.posX <= item.posX + item.width) &&
                 this.posY + this.height >= item.posY - 4 &&
                 this.posY + this.height <= canvas.height - 2) {
                 countX++;
             }
-
             // Стоит ли марио на каком-то блоке
             if (this.posY + this.height >= item.posY - 4 &&
                 this.posY + this.height <= item.posY &&
@@ -134,7 +62,7 @@ class Mario extends DynamicEntity {
                 this.posX <= item.posX + item.width) {
                 countY++;
             }
-        })
+        });
 
         // падает пока не приземлиться на объект
         if (countX > 0 && countY === 0 && this.readyToJump) {
@@ -148,45 +76,113 @@ class Mario extends DynamicEntity {
     move() {
         // Если нажата <-
         if (keyObj['37']) {
-            if (keyObj['38']) {
-                this.moveLeft(1);
-            }
-            else {
-                this.moveLeft(0);
-            }
+            this.moveLeft();
         }
 
         // Если нажата -> 
         if (keyObj['39']) {
-            if (keyObj['38']) {
-                this.moveRight(1);
-            }
-            else {
-                this.moveRight(0);
-            }
+            this.moveRight();
         }
 
         // Если нажата клавиша вверх ^
         if (keyObj['38']) {
-            if (keyObj['39']) {
-                this.jump('right');
-            }
-            else if (keyObj['37']) {
-                this.jump('left');
-            }
-            else {
-                this.jump();
-            }
+            this.jump();
         }
     }
 
     stopJump() {
-        this.sx = 216;
-        this.sy = 0;
         this.jumpCount = 0;
         this.jumpHeight = 0;
         this.readyToJump = true;
+        this.jumpFlag = false;
         keyObj['38'] = false;
+    }
+
+    interactionWithEntity() {
+        this.stopRight = false;
+        this.stopLeft = false;
+        interactionEntityArr.forEach((item) => {
+
+            /*Остановка движения, лево*/
+            if (item.posY + item.height > this.posY &&
+                item.posY < this.posY + this.height &&
+                this.posX <= item.posX + item.width + 3 &&
+                this.posX > item.posX + item.width) {
+                this.stopLeft = true;
+            }
+
+            /*Остановка движения, право*/
+            if (item.posY + item.height > this.posY &&
+                item.posY < this.posY + this.height &&
+                this.posX + this.width >= item.posX - 3 &&
+                this.posX + this.width < item.posX) {
+                this.stopRight = true;
+            }
+
+            /*Если марио ударился об потолок при прыжке*/
+            if (item.posY + item.height - 4 <= this.posY &&
+                item.posY + item.height + 3 >= this.posY &&
+                this.posX + this.width >= item.posX &&
+                this.posX <= item.posX + item.width) {
+                this.jumpLength = (this.posYAfterJump - this.posY) / 2;
+            }
+
+            /*Если марио запрыгнул на объект*/
+            if (this.posX + this.width >= item.posX &&
+                this.posX <= item.posX + item.width &&
+                this.posY + this.height >= item.posY - 5 &&
+                this.posY + this.height <= item.posY + 2 &&
+                !this.readyToJump) {
+                this.posY = item.posY - this.height - 1;
+                this.stopJump();
+            }
+
+            /*Фикс бага при зацикливании прыжка*/
+            if (this.jumpIncrement === -1) {
+                if (this.posX + this.width >= item.posX &&
+                    this.posX <= item.posX + item.width) {
+                    this.stopJump();
+                }
+            }
+        });
+    }
+
+    sprite() {
+        if (this.slip && this.runLeft) {
+            this.sx = 5;
+            this.sy = 40;
+        }
+
+        if (this.slip && this.runRight) {
+            this.sx = 425;
+            this.sy = 40;
+        }
+
+        // Выбор спрайта при нажатой ->
+        if (this.jumpFlag && this.runRight) {
+            this.sx = 395;
+            this.sy = 80;
+
+        }
+        // Выбор спрайта при нажатой <- 
+        if (this.jumpFlag && this.runLeft) {
+            this.sx = 35;
+            this.sy = 80;
+        }
+
+        if (!this.jumpFlag && !this.runLeft && !this.runRight) {
+            this.sx = 216;
+            this.sy = 0;
+        }
+
+        if (!this.jumpFlag && !this.slip && this.runLeft) {
+            this.movementSpriteSheet([95, 125, 155, 185], 0.01);
+        }
+
+        if (!this.jumpFlag && !this.slip && this.runRight) {
+            this.movementSpriteSheet([245, 275, 305, 335], 0.01);
+        }
+
     }
 
     addLife() {

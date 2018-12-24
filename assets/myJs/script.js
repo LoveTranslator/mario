@@ -82,10 +82,10 @@ function draw() {
 
     area.moveMap();
     area.interactionWithMario();
-
     mario.move();
     mario.slipBlock();
-
+    mario.interactionWithEntity();
+    mario.sprite();
     requestAnimationFrame(draw);
 }
 
