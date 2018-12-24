@@ -14,8 +14,11 @@ class Mario extends DynamicEntity {
         this.jumpHeight = 0;
         this.jumpIncrement = 0;
 
-        this.runLeft = false;
-        this.runRight = false;
+        this.runLeft = false; // Флаг на бег марио влево
+        this.runRight = false; // Флаг на бег марио вправо
+
+        this.countY = 0; // Счётчтик, Марио не стоит на объекте, но под ним ниже есть объекты
+        this.countXY = 0; // Счётчик, Марио стоит на объекте 
 
         this.stopRight = false; // Флаг на остановку вправо.
         this.stopLeft = false; // Флаг на остановку влево.
@@ -44,28 +47,9 @@ class Mario extends DynamicEntity {
 
     slipBlock() { // неверно отрабатывает функция!!!!
         this.slip = true;
-        let countX = 0;
-        let countY = 0;
-
-        // Марио не стоит на блоке, но под ним ниже есть N колво блоков
-        interactionEntityArr.forEach((item) => {
-            if (!(this.posX + this.width >= item.posX &&
-                    this.posX <= item.posX + item.width) &&
-                this.posY + this.height >= item.posY - 4 &&
-                this.posY + this.height <= canvas.height - 2) {
-                countX++;
-            }
-            // Стоит ли марио на каком-то блоке
-            if (this.posY + this.height >= item.posY - 4 &&
-                this.posY + this.height <= item.posY &&
-                this.posX + this.width >= item.posX &&
-                this.posX <= item.posX + item.width) {
-                countY++;
-            }
-        });
 
         // падает пока не приземлиться на объект
-        if (countX > 0 && countY === 0 && this.readyToJump) {
+        if (this.countY > 0 && this.countXY === 0 && this.readyToJump) {
             this.posY += 4;
         }
         else {
@@ -101,6 +85,8 @@ class Mario extends DynamicEntity {
     interactionWithEntity() {
         this.stopRight = false;
         this.stopLeft = false;
+        this.countY = 0;
+        this.countXY = 0;
         interactionEntityArr.forEach((item) => {
 
             /*Остановка движения, лево*/
@@ -143,6 +129,21 @@ class Mario extends DynamicEntity {
                     this.posX <= item.posX + item.width) {
                     this.stopJump();
                 }
+            }
+            
+            // Марио не стоит на блоке, но под ним ниже есть N колво блоков
+            if (!(this.posX + this.width >= item.posX &&
+                    this.posX <= item.posX + item.width) &&
+                this.posY + this.height >= item.posY - 4 &&
+                this.posY + this.height <= canvas.height - 2) {
+                this.countY++;
+            }
+            // Стоит ли марио на каком-то блоке
+            if (this.posY + this.height >= item.posY - 4 &&
+                this.posY + this.height <= item.posY &&
+                this.posX + this.width >= item.posX &&
+                this.posX <= item.posX + item.width) {
+                this.countXY++;
             }
         });
     }
