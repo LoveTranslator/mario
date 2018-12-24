@@ -3,9 +3,11 @@
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
+let dynamicEntityArr = [];
 let interactionEntityArr = [];
 let buildEntityArr = [];
 let entityArr = [];
+
 
 let area = new Area('assets/images/background1.png', 5);
 let mario = new Mario('assets/images/mario.png', 216, 0, 16, 16, 50, 328, 40, 40);
@@ -54,6 +56,8 @@ createEntity(Entity, 'assets/images/custom.png', 0, 31, 16, 16, 3300, 368, 32, 3
 createEntity(Entity, 'assets/images/misc-2.png', 248, 864, 31, 80, 3600, 208, 62, 160, 1); // крепость, левая часть
 createEntity(Entity, 'assets/images/misc-2.png', 279, 864, 48, 80, 3662, 208, 96, 160, 1); // крепость, правая часть
 
+createEntity(DynamicEntity, 'assets/images/custom.png', 272.5, 16.5, 15.75, 15.75, 130, 336.5, 33, 31.5, 1); // гриб
+
 buildEntityArr.push(...entityArr);
 interactionEntityArr.push(...entityArr);
 
@@ -63,6 +67,9 @@ function createEntity(myClass, src, sx, sy, sWidth, sHeight, posX, posY, width, 
     for (i; i < count; i++) {
         entityArr[i] = new myClass(src, sx, sy, sWidth, sHeight, posX, posY, width, height);
         posX += width;
+        if (myClass === DynamicEntity) {
+            dynamicEntityArr.push(entityArr[i]);
+        }
     }
 }
 
@@ -75,10 +82,14 @@ function draw() {
     });
 
     interactionEntityArr.forEach((item, i) => {
-        if (item.posX + item.width < 0) {
+        if (item.posX + item.width < 0 && !item.hasOwnProperty('posXAfterMoving')) {
             interactionEntityArr.splice(i, 1);
         }
     });
+
+    dynamicEntityArr.forEach(item => {
+        item.movingEntity();
+    })
 
     area.moveMap();
     area.interactionWithMario();
@@ -86,6 +97,7 @@ function draw() {
     mario.slipBlock();
     mario.interactionWithEntity();
     mario.sprite();
+
     requestAnimationFrame(draw);
 }
 

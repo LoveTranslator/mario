@@ -21,7 +21,7 @@ class Key {
             mario.runRight = true;
         }
         
-        if (event.keyCode === 38) {
+        if (event.keyCode === 38 && this['38']) {
             mario.jumpFlag = true;
         }
     }
@@ -37,16 +37,5 @@ class Key {
         if (event.keyCode === 39) {
             mario.runRight = false;
         }
-        
-        /*Не отрабатывает*/
-        /*if (event.keyCode === 37) { 
-            mario.sy = 0;
-            mario.sx = 186;
-        }
-
-        if (event.keyCode === 39) {
-            mario.sy = 0;
-            mario.sx = 246;
-        }*/
     }
 }

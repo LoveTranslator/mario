@@ -21,6 +21,12 @@ class Area extends Entity {
         interactionEntityArr.forEach(item => {
             if (mario.posX >= 460 && keyObj['39'] && this.arrBack[this.count - 1] > 3 && !mario.stopRight) {
                 item.posX -= mario.speedRight;
+                if (item.hasOwnProperty('posXAfterMoving')) {
+                    console.log('1)', item.posXAfterMoving, item.posX, item.endPos);
+                    item.posXAfterMoving -= mario.speedRight;
+                    item.endPos -= mario.speedRight;
+                    console.log('2)', item.posXAfterMoving, item.posX, item.endPos);
+                }
             }
         })
 
