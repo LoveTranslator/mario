@@ -164,18 +164,18 @@ class Mario extends DynamicEntity {
                 item.posY < this.posY + this.height &&
                 this.posX <= item.posX + item.width + 3 &&
                 this.posX > item.posX + item.width) {
+                this.stopJump();
                 this.deathFlag = true;
                 this.jumpLength = 10;
                 this.posYAfterJump = this.posY;
                 interactionEntityArr.length = 0;
             }
-            
+
             /*press объекта*/
             if (this.posY + this.height >= item.posY - 4 &&
                 this.posY + this.height <= item.posY &&
                 this.posX + this.width >= item.posX &&
                 this.posX <= item.posX + item.width && !this.deathFlag) {
-                console.log(!this.deathFlag);
                 item.press = true;
                 item.sx = 304;
                 item.sy = 24;
