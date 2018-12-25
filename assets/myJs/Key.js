@@ -1,6 +1,6 @@
 class Key {
     constructor() {
-
+        
     }
     onkeydown(event) {
         if (!mario.deathFlag) {
@@ -13,6 +13,7 @@ class Key {
             this['38'] = false;
         }
         if (event.keyCode === 38 && mario.readyToJump) {
+            play.audioJump.playing();
             mario.jumpLength = 50;
         }
         if (event.keyCode === 38 && mario.readyToJump) {

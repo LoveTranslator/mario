@@ -1,3 +1,117 @@
+@font-face {
+    font-family: MarioFont;
+    src: url("../fonts/fontMario.otf") format("opentype");
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+
+    margin: 0;
+
+    background-color: #385CA9;
+}
+
 canvas {
+    display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+
     border: 1px solid black;
+}
+
+menu {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    width: 800px;
+    height: 400px;
+    padding: 0;
+
+    font-family: marioFont;
+}
+
+menu button {
+    width: 266.6666666666667px;
+    height: 200px;
+    padding: 0;
+
+    border: 1px solid black;
+
+    cursor: pointer;
+    font-family: MarioFont;
+    overflow: hidden;
+}
+
+menu button div {
+    width: 266.6666666666667px;
+    height: 200px;
+    font-size: 38px;
+
+    color: white;
+    line-height: 200px;
+    transition: all .9s;
+}
+
+
+menu button:nth-child(1) div {
+    background-image: url(../images/menu_background.jpg);
+    background-position: left top;
+}
+
+menu button:nth-child(2) div {
+    background-image: url(../images/menu_background.jpg);
+    background-position: center top;
+}
+
+menu button:nth-child(3) div {
+    background-image: url(../images/menu_background.jpg);
+    background-position: top right;
+}
+
+menu button:nth-child(4) div {
+    background-image: url(../images/menu_background.jpg);
+    background-position: left bottom;
+}
+
+menu button:nth-child(5) div {
+    background-image: url(../images/menu_background.jpg);
+    background-position: center bottom;
+}
+
+menu button:nth-child(6) div {
+    background-image: url(../images/menu_background.jpg);
+    background-position: right bottom;
+}
+
+menu button div:hover {
+    font-size: 42px;
+    transform: scale(1.1);
+}
+
+menu button div span {
+    display: block;
+
+    width: 266.6666666666667px;
+    height: 200px;
+
+    line-height: 200px;
+    background: rgba(0, 0, 0, 0.3);
+    transition: all .9s;
+}
+
+menu button div span:hover {
+    background: rgba(0, 0, 0, 0.5);
 }

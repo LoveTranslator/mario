@@ -93,7 +93,7 @@ class Mario extends DynamicEntity {
         this.stopLeft = false;
         this.countY = 0;
         this.countXY = 0;
-        interactionEntityArr.forEach((item) => {
+        play.interactionEntityArr.forEach((item) => {
 
             /*Остановка движения, лево*/
             if (item.posY + item.height > this.posY &&
@@ -153,7 +153,7 @@ class Mario extends DynamicEntity {
             }
         });
 
-        dynamicEntityArr.forEach((item, i) => {
+        play.dynamicEntityArr.forEach((item, i) => {
 
             /*Смерть)*/
             if (item.posY + item.height > this.posY &&
@@ -168,7 +168,8 @@ class Mario extends DynamicEntity {
                 this.deathFlag = true;
                 this.jumpLength = 10;
                 this.posYAfterJump = this.posY;
-                interactionEntityArr.length = 0;
+                play.interactionEntityArr.length = 0;
+                play.audioDeath.playing();
             }
 
             /*press объекта*/
@@ -240,7 +241,7 @@ class Mario extends DynamicEntity {
             this.jump();
         }
         if (this.jumpIncrement === -1) {
-            this.posY += 2;
+            this.posY += 1;
         }
     }
 }

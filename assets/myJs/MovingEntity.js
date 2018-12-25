@@ -25,16 +25,16 @@ class MovingEntity extends DynamicEntity {
     }
 
     deathEntity() {
-        if (dynamicEntityArr.indexOf(this) !== -1) {
-            dynamicEntityArr.splice(dynamicEntityArr.indexOf(this), 1);
+        if (play.dynamicEntityArr.indexOf(this) !== -1) {
+            play.dynamicEntityArr.splice(play.dynamicEntityArr.indexOf(this), 1);
         }
 
-        if (buildEntityArr.indexOf(this) !== -1) {
-            buildEntityArr.splice(buildEntityArr.indexOf(this), 1);
+        if (play.buildEntityArr.indexOf(this) !== -1) {
+            play.buildEntityArr.splice(play.buildEntityArr.indexOf(this), 1);
         }
 
-        if (interactionEntityArr.indexOf(this) !== -1) {
-            interactionEntityArr.splice(interactionEntityArr.indexOf(this), 1);
+        if (play.interactionEntityArr.indexOf(this) !== -1) {
+            play.interactionEntityArr.splice(play.interactionEntityArr.indexOf(this), 1);
         }
     }
 }
