@@ -23,6 +23,7 @@ class Mario extends DynamicEntity {
         this.stopRight = false; // Флаг на остановку вправо.
         this.stopLeft = false; // Флаг на остановку влево.
         this.slip = false; // Флаг на 'сползания' с блока.
+        this.deathFlag = false;
     }
 
     moveLeft() {
@@ -71,6 +72,11 @@ class Mario extends DynamicEntity {
         // Если нажата клавиша вверх ^
         if (keyObj['38']) {
             this.jump();
+        }
+
+        // Если марио погиб
+        if (this.deathFlag) {
+            this.death();
         }
     }
 
@@ -130,7 +136,7 @@ class Mario extends DynamicEntity {
                     this.stopJump();
                 }
             }
-            
+
             // Марио не стоит на блоке, но под ним ниже есть N колво блоков
             if (!(this.posX + this.width >= item.posX &&
                     this.posX <= item.posX + item.width) &&
@@ -146,51 +152,95 @@ class Mario extends DynamicEntity {
                 this.countXY++;
             }
         });
+
+        dynamicEntityArr.forEach((item, i) => {
+
+            /*Смерть)*/
+            if (item.posY + item.height > this.posY &&
+                item.posY < this.posY + this.height &&
+                this.posX + this.width >= item.posX - 3 &&
+                this.posX + this.width < item.posX ||
+                item.posY + item.height > this.posY &&
+                item.posY < this.posY + this.height &&
+                this.posX <= item.posX + item.width + 3 &&
+                this.posX > item.posX + item.width) {
+                this.deathFlag = true;
+                this.jumpLength = 10;
+                this.posYAfterJump = this.posY;
+                interactionEntityArr.length = 0;
+            }
+            
+            /*press объекта*/
+            if (this.posY + this.height >= item.posY - 4 &&
+                this.posY + this.height <= item.posY &&
+                this.posX + this.width >= item.posX &&
+                this.posX <= item.posX + item.width && !this.deathFlag) {
+                console.log(!this.deathFlag);
+                item.press = true;
+                item.sx = 304;
+                item.sy = 24;
+                item.sHeight = 8;
+                item.height = 16;
+                item.posY = 352.5;
+            }
+
+            if (item.press) {
+                setTimeout(item.deathEntity.bind(item), 400);
+            }
+
+
+        })
     }
 
     sprite() {
-        if (this.slip && this.runLeft) {
+        if (this.slip && this.runLeft && !this.deathFlag) {
             this.sx = 5;
             this.sy = 40;
         }
 
-        if (this.slip && this.runRight) {
+        if (this.slip && this.runRight && !this.deathFlag) {
             this.sx = 425;
             this.sy = 40;
         }
 
         // Выбор спрайта при нажатой ->
-        if (this.jumpFlag && this.runRight) {
+        if (this.jumpFlag && this.runRight && !this.deathFlag) {
             this.sx = 395;
             this.sy = 80;
 
         }
         // Выбор спрайта при нажатой <- 
-        if (this.jumpFlag && this.runLeft) {
+        if (this.jumpFlag && this.runLeft && !this.deathFlag) {
             this.sx = 35;
             this.sy = 80;
         }
 
-        if (!this.jumpFlag && !this.runLeft && !this.runRight) {
+        if (!this.jumpFlag && !this.runLeft && !this.runRight && !this.deathFlag) {
             this.sx = 216;
             this.sy = 0;
         }
 
-        if (!this.jumpFlag && !this.slip && this.runLeft) {
+        if (!this.jumpFlag && !this.slip && this.runLeft && !this.deathFlag) {
             this.movementSpriteSheet([95, 125, 155, 185], 0.01);
         }
 
-        if (!this.jumpFlag && !this.slip && this.runRight) {
+        if (!this.jumpFlag && !this.slip && this.runRight && !this.deathFlag) {
             this.movementSpriteSheet([245, 275, 305, 335], 0.01);
         }
 
+        if (this.deathFlag) {
+            this.sx = 215;
+            this.sy = 120;
+        }
     }
 
-    addLife() {
+    death() {
 
-    }
-
-    removeLife() {
-
+        if (this.jumpIncrement !== -1) {
+            this.jump();
+        }
+        if (this.jumpIncrement === -1) {
+            this.posY += 2;
+        }
     }
 }

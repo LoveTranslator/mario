@@ -11,7 +11,7 @@ class Entity {
         this.posX = posX;
         this.posY = posY;
         this.width = width;
-        this.height = height; 
+        this.height = height;
     }
 
     loading() {

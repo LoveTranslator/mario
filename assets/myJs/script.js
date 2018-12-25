@@ -56,10 +56,12 @@ createEntity(Entity, 'assets/images/custom.png', 0, 31, 16, 16, 3300, 368, 32, 3
 createEntity(Entity, 'assets/images/misc-2.png', 248, 864, 31, 80, 3600, 208, 62, 160, 1); // крепость, левая часть
 createEntity(Entity, 'assets/images/misc-2.png', 279, 864, 48, 80, 3662, 208, 96, 160, 1); // крепость, правая часть
 
-createEntity(DynamicEntity, 'assets/images/custom.png', 272.5, 16.5, 15.75, 15.75, 130, 336.5, 33, 31.5, 1); // гриб
+createEntity(MovingEntity, 'assets/images/custom.png', 272.5, 16.5, 15.75, 15.75, 110, 336.5, 33, 31.5, 1); // гриб
 
 buildEntityArr.push(...entityArr);
 interactionEntityArr.push(...entityArr);
+buildEntityArr.push(mario);
+
 
 function createEntity(myClass, src, sx, sy, sWidth, sHeight, posX, posY, width, height, count) {
     let i = entityArr.length;
@@ -67,7 +69,7 @@ function createEntity(myClass, src, sx, sy, sWidth, sHeight, posX, posY, width, 
     for (i; i < count; i++) {
         entityArr[i] = new myClass(src, sx, sy, sWidth, sHeight, posX, posY, width, height);
         posX += width;
-        if (myClass === DynamicEntity) {
+        if (myClass === MovingEntity) {
             dynamicEntityArr.push(entityArr[i]);
         }
     }
@@ -88,7 +90,7 @@ function draw() {
     });
 
     dynamicEntityArr.forEach(item => {
-        item.movingEntity();
+        item.moveEntity();
     })
 
     area.moveMap();

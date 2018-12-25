@@ -4,10 +4,6 @@ class DynamicEntity extends Entity {
 
         this.frameDelay = 5; // задержка кадра, при проходе по карте спрайтов
         this.currentFrameDelay = 0;
-        this.posXAfterMoving = this.posX;
-        this.direction = 1;
-        this.endPos = this.posX + 100;
-        console.log(this.posX);
     }
 
     movementSpriteSheet(arrPos, sy) {
@@ -26,16 +22,5 @@ class DynamicEntity extends Entity {
                 this.currentFrameDelay++;
             }
         }
-    }
-
-    movingEntity() {
-        if (this.posX > this.endPos) {
-            this.direction = -this.direction;
-        }
-        if (this.posX < this.posXAfterMoving) {
-            this.direction = -this.direction;
-        }
-        this.movementSpriteSheet([272.5, 288.25], 16.5);
-        this.posX += this.direction;
     }
 }

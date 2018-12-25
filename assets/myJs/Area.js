@@ -22,10 +22,8 @@ class Area extends Entity {
             if (mario.posX >= 460 && keyObj['39'] && this.arrBack[this.count - 1] > 3 && !mario.stopRight) {
                 item.posX -= mario.speedRight;
                 if (item.hasOwnProperty('posXAfterMoving')) {
-                    console.log('1)', item.posXAfterMoving, item.posX, item.endPos);
                     item.posXAfterMoving -= mario.speedRight;
                     item.endPos -= mario.speedRight;
-                    console.log('2)', item.posXAfterMoving, item.posX, item.endPos);
                 }
             }
         })
@@ -39,10 +37,12 @@ class Area extends Entity {
 
     interactionWithMario() {
         /*Остановка прыжка при попадании на нижнюю грань canvas*/
-        if (mario.posY + mario.height >= canvas.height - 6 &&
-            !mario.readyToJump) {
-            mario.posY = canvas.height - mario.height - 1;
+        if (mario.posY + mario.height >= canvas.height - 6 && !mario.deathFlag) {
             mario.stopJump();
+            mario.deathFlag = true;
+            mario.jumpLength = 10;
+            mario.posYAfterJump = mario.posY;
+            interactionEntityArr.length = 0;
         }
     }
 }

@@ -3,7 +3,12 @@ class Key {
 
     }
     onkeydown(event) {
-        this[event.keyCode] = true;
+        if (!mario.deathFlag) {
+            this[event.keyCode] = true;
+        }
+        if (mario.deathFlag) {
+            this[event.keyCode] = false;
+        }
         if (this['38'] && mario.slip) {
             this['38'] = false;
         }
@@ -20,8 +25,8 @@ class Key {
         if (event.keyCode === 39) {
             mario.runRight = true;
         }
-        
-        if (event.keyCode === 38 && this['38']) {
+
+        if (event.keyCode === 38 && this['38'] && !mario.deathFlag) {
             mario.jumpFlag = true;
         }
     }
