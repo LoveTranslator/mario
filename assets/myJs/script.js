@@ -4,8 +4,11 @@ const ctx = canvas.getContext('2d');
 let startButton = document.getElementById('start_game');
 let menu = document.querySelector('menu');
 let repeatButton = document.getElementById('repeat');
-
-let audioOverworld = new AudioEvents('assets/audio/overworld.mp3', true, true);
+/*let audioOverworld = new AudioEvents('assets/audio/overworld.mp3', true, true);*/
+let audioOverworld = new Audio;
+audioOverworld.src = 'assets/audio/overworld.mp3';
+audioOverworld.loop = true;
+audioOverworld.volume = 0.5;
 let audioJump = new AudioEvents('assets/audio/jump.mp3');
 let audioDeath = new AudioEvents('assets/audio/death.mp3');
 let game = new Game();
@@ -20,7 +23,7 @@ let keyObj = new Key();
 
 
 function start() {
-    audioOverworld
+    audioOverworld.play();
     menu.style.display = 'none';
     canvas.style.display = 'block';
     area = new Area('assets/images/background1.png', 5);
@@ -32,6 +35,7 @@ function start() {
 
 function repeat() {
     mario = new Mario('assets/images/mario.png', 216, 0, 16, 16, 50, 328, 40, 40);
+    area = new Area('assets/images/background1.png', 5);
 
     interactionEntityArr.length = 0;
     buildEntityArr.length = 0;
@@ -43,7 +47,7 @@ function repeat() {
 }
 
 function myMenu() {
-    audioOverworld.playing();
+
     menu.style.display = 'flex';
     canvas.style.display = 'none';
     repeatButton.style.display = 'none';

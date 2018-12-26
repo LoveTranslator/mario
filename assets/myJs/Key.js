@@ -32,13 +32,6 @@ class Key {
         }
     }
 
-    onkeypress(event) {
-        console.log(event.keyCode);
-        if (mario.deathFlag) {
-            this[event.keyCode] = false;
-        }
-    }
-
     onkeyup(event) {
         if (event.keyCode !== 38) {
             this[event.keyCode] = false;

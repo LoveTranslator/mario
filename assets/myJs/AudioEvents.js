@@ -13,4 +13,8 @@ class AudioEvents {
     playing() {
         this.audio.play();
     }
+    
+    /*volume(vol) {
+        this.volume = vol;
+    }*/
 }
