@@ -1,17 +1,7 @@
 class Game {
-    constructor() {
-        this.dynamicEntityArr = [];
-        this.interactionEntityArr = [];
-        this.buildEntityArr = [];
-        this.entityArr = [];
-
-        this.audioOverworld = new AudioEvents('assets/audio/overworld.mp3', true, true);
-        this.audioJump = new AudioEvents('assets/audio/jump.mp3');
-        this.audioDeath = new AudioEvents('assets/audio/death.mp3');
-    }
+    constructor() {}
     lvl1() {
-        this.buildEntityArr.push(area);
-        this.buildEntityArr.push(mario);
+        buildEntityArr.push(area);
 
         this.createEntity(Entity, 'assets/images/custom.png', 0, 31, 16, 16, 0, 368, 32, 32, 34); // кирпичи под ногами
 
@@ -55,48 +45,28 @@ class Game {
         this.createEntity(Entity, 'assets/images/misc-2.png', 279, 864, 48, 80, 3662, 208, 96, 160, 1); // крепость, правая часть
 
         this.createEntity(MovingEntity, 'assets/images/custom.png', 272.5, 16.5, 15.75, 15.75, 110, 336.5, 33, 31.5, 1); // гриб
-        this.buildEntityArr.push(...this.entityArr);
-        this.interactionEntityArr.push(...this.entityArr);
-        this.buildEntityArr.push(mario);
+        buildEntityArr.push(...entityArr);
+        interactionEntityArr.push(...entityArr);
+        buildEntityArr.push(mario);
     }
 
     createEntity(myClass, src, sx, sy, sWidth, sHeight, posX, posY, width, height, count) {
-        let i = this.entityArr.length;
-        count = count + this.entityArr.length;
+        let i = entityArr.length;
+        count = count + entityArr.length;
         for (i; i < count; i++) {
-            this.entityArr[i] = new myClass(src, sx, sy, sWidth, sHeight, posX, posY, width, height);
+            entityArr[i] = new myClass(src, sx, sy, sWidth, sHeight, posX, posY, width, height);
             posX += width;
             if (myClass === MovingEntity) {
-                this.dynamicEntityArr.push(this.entityArr[i]);
+                dynamicEntityArr.push(entityArr[i]);
             }
         }
     }
 
-    draw() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        this.buildEntityArr.forEach((item, i) => {
-            if (item === area || item.posX + item.width > 0 && item.posX < canvas.width) {
-                item.toBuild();
-            }
-        });
-
-        this.interactionEntityArr.forEach((item, i) => {
-            if (item.posX + item.width < 0 && !item.hasOwnProperty('posXAfterMoving')) {
-                this.interactionEntityArr.splice(i, 1);
-            }
-        });
-
-        this.dynamicEntityArr.forEach(item => {
-            item.moveEntity();
-        })
-
-        area.moveMap();
-        area.interactionWithMario();
-        mario.move();
-        mario.slipBlock();
-        mario.interactionWithEntity();
-        mario.sprite();
-
-        requestAnimationFrame(this.draw.bind(this));
+    clearMap() {
+        /*ctx.clearRect(0, 0, canvas.width, canvas.height);
+        interactionEntityArr.length = 0;
+        buildEntityArr.length = 0;
+        dynamicEntityArr.length = 0;
+        entityArr.length = 0;*/
     }
 }

@@ -60,17 +60,17 @@ class Mario extends DynamicEntity {
 
     move() {
         // Если нажата <-
-        if (keyObj['37']) {
+        if (keyObj['37'] && !this.deathFlag) {
             this.moveLeft();
         }
 
         // Если нажата -> 
-        if (keyObj['39']) {
+        if (keyObj['39'] && !this.deathFlag) {
             this.moveRight();
         }
 
         // Если нажата клавиша вверх ^
-        if (keyObj['38']) {
+        if (keyObj['38'] && !this.deathFlag) {
             this.jump();
         }
 
@@ -93,21 +93,21 @@ class Mario extends DynamicEntity {
         this.stopLeft = false;
         this.countY = 0;
         this.countXY = 0;
-        play.interactionEntityArr.forEach((item) => {
+        interactionEntityArr.forEach((item) => {
 
             /*Остановка движения, лево*/
             if (item.posY + item.height > this.posY &&
                 item.posY < this.posY + this.height &&
-                this.posX <= item.posX + item.width + 3 &&
-                this.posX > item.posX + item.width) {
+                this.posX <= item.posX + item.width + 4 &&
+                this.posX > item.posX + item.width || this.deathFlag) {
                 this.stopLeft = true;
             }
 
             /*Остановка движения, право*/
             if (item.posY + item.height > this.posY &&
                 item.posY < this.posY + this.height &&
-                this.posX + this.width >= item.posX - 3 &&
-                this.posX + this.width < item.posX) {
+                this.posX + this.width >= item.posX - 4 &&
+                this.posX + this.width < item.posX || this.deathFlag) {
                 this.stopRight = true;
             }
 
@@ -153,7 +153,7 @@ class Mario extends DynamicEntity {
             }
         });
 
-        play.dynamicEntityArr.forEach((item, i) => {
+        dynamicEntityArr.forEach((item, i) => {
 
             /*Смерть)*/
             if (item.posY + item.height > this.posY &&
@@ -168,8 +168,8 @@ class Mario extends DynamicEntity {
                 this.deathFlag = true;
                 this.jumpLength = 10;
                 this.posYAfterJump = this.posY;
-                play.interactionEntityArr.length = 0;
-                play.audioDeath.playing();
+                interactionEntityArr.length = 0;
+                audioDeath.playing();
             }
 
             /*press объекта*/
@@ -236,12 +236,12 @@ class Mario extends DynamicEntity {
     }
 
     death() {
-
         if (this.jumpIncrement !== -1) {
             this.jump();
         }
         if (this.jumpIncrement === -1) {
             this.posY += 1;
         }
+        repeatButton.style.display = 'block';
     }
 }

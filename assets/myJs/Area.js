@@ -18,7 +18,7 @@ class Area extends Entity {
     }
 
     moveMap() {
-        play.interactionEntityArr.forEach(item => {
+        interactionEntityArr.forEach(item => {
             if (mario.posX >= 460 && keyObj['39'] && this.arrBack[this.count - 1] > 3 && !mario.stopRight) {
                 item.posX -= mario.speedRight;
                 if (item.hasOwnProperty('posXAfterMoving')) {
@@ -28,7 +28,7 @@ class Area extends Entity {
             }
         })
 
-        if (mario.posX >= 460 && keyObj['39'] && this.arrBack[this.count - 1] > 3 && !mario.stopRight) {
+        if (mario.posX >= 460 && keyObj['39'] && this.arrBack[this.count - 1] > 3 && !mario.stopRight && !this.deathFlag) {
             for (let i = 0; i < this.arrBack.length; i++) {
                 this.arrBack[i] -= mario.speedRight;
             }
@@ -42,8 +42,8 @@ class Area extends Entity {
             mario.deathFlag = true;
             mario.jumpLength = 10;
             mario.posYAfterJump = mario.posY;
-            play.interactionEntityArr.length = 0;
-            play.audioDeath.playing();
+            interactionEntityArr.length = 0;
+            audioDeath.playing();
         }
     }
 }
